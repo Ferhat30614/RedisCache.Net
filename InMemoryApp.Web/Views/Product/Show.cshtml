@@ -1,6 +1,7 @@
 ﻿
 @{
     ViewData["Title"] = "Show";
+    ProductModel product = ViewBag.Product as ProductModel;
 }
 
 <h1>viewback  :   @ViewBag.Zaman</h1>
@@ -8,4 +9,6 @@
 
 
 <h1> callback : @ViewBag.CallBack</h1>
+
+<h1> Product  :   @product.Id ----- @product.Name ----- @product.Price  </h1>
 

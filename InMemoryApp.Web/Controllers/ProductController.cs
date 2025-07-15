@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.DataProtection.KeyManagement;
+﻿using InMemoryApp.Web.Models;
+using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Mono.TextTemplating;
@@ -53,6 +54,9 @@ namespace InMemoryApp.Web.Controllers
 
             _memoryCache.Set<string>("zaman",DateTime.Now.ToString(),option);
 
+            ProductModel p =new ProductModel() { Id=1 , Name="Telefon", Price=123};
+
+            _memoryCache.Set<ProductModel>("product:1",p);
 
 
             return View();
@@ -67,6 +71,7 @@ namespace InMemoryApp.Web.Controllers
 
             ViewBag.Zaman = zamanCache;
             ViewBag.CallBack = callback;
+            ViewBag.Product = _memoryCache.Get<ProductModel>("product:1");
 
             return View();
         }
