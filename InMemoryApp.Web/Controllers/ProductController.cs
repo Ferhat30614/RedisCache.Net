@@ -36,8 +36,8 @@ namespace InMemoryApp.Web.Controllers
 
             MemoryCacheEntryOptions option = new MemoryCacheEntryOptions();
 
-            option.AbsoluteExpiration=DateTime.Now.AddSeconds(20);
-            option.SlidingExpiration=TimeSpan.FromSeconds(10);   
+            option.AbsoluteExpiration=DateTime.Now.AddSeconds(10);
+            //option.SlidingExpiration=TimeSpan.FromSeconds(10);   
 
             option.Priority=CacheItemPriority.High;
             option.RegisterPostEvictionCallback((key, value, reason, state) =>
@@ -45,9 +45,11 @@ namespace InMemoryApp.Web.Controllers
 
                 //cachede silme işlemi olunca ilk önce parametrelere değer  gelcek sonra metod gövdesi çalışcak
 
-
+                _memoryCache.Set<string>("callback", $" key: {key} -> değer: {value}----> sebep:  {reason}");
 
             });
+
+            
 
             _memoryCache.Set<string>("zaman",DateTime.Now.ToString(),option);
 
@@ -59,10 +61,12 @@ namespace InMemoryApp.Web.Controllers
         {
 
             _memoryCache.TryGetValue("zaman",out string? zamanCache);
+            _memoryCache.TryGetValue("callback", out string? callback);
 
 
 
             ViewBag.Zaman = zamanCache;
+            ViewBag.CallBack = callback;
 
             return View();
         }
