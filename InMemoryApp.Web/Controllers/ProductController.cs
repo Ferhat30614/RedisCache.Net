@@ -1,5 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.DataProtection.KeyManagement;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
+using Mono.TextTemplating;
+using Newtonsoft.Json.Linq;
+using System.Drawing;
 
 namespace InMemoryApp.Web.Controllers
 {
@@ -14,8 +18,8 @@ namespace InMemoryApp.Web.Controllers
 
         public IActionResult Index()
         {
-            _memoryCache.Set<string>("zaman", DateTime.Now.ToString());
-            _memoryCache.Remove("zaman");
+            //_memoryCache.Set<string>("zaman", DateTime.Now.ToString());
+            //_memoryCache.Remove("zaman");
             //if (!String.IsNullOrEmpty(_memoryCache.Get<string>("zaman")))
             //{
 
@@ -23,31 +27,42 @@ namespace InMemoryApp.Web.Controllers
 
             //}
 
-            if (!_memoryCache.TryGetValue("zaman", out string zamanCache))
+            //if (!_memoryCache.TryGetValue("zaman", out string zamanCache))
+            //{
+            //    Console.WriteLine("zaman cache  =  null");
+            //}
+            //Console.WriteLine("zaman cache  = "+zamanCache);
+
+
+            MemoryCacheEntryOptions option = new MemoryCacheEntryOptions();
+
+            option.AbsoluteExpiration=DateTime.Now.AddSeconds(20);
+            option.SlidingExpiration=TimeSpan.FromSeconds(10);   
+
+            option.Priority=CacheItemPriority.High;
+            option.RegisterPostEvictionCallback((key, value, reason, state) =>
             {
 
+                //cachede silme işlemi olunca ilk önce parametrelere değer  gelcek sonra metod gövdesi çalışcak
 
-                Console.WriteLine("zaman cache  =  null");
 
-            }
 
-            Console.WriteLine("zaman cache  = "+zamanCache);
+            });
 
-            
+            _memoryCache.Set<string>("zaman",DateTime.Now.ToString(),option);
+
+
 
             return View();
         }
         public IActionResult Show()
         {
 
-            var sonuc= _memoryCache.GetOrCreate<string>("zaman", entry =>
-            {
-                return DateTime.Now.ToString();
-            });
+            _memoryCache.TryGetValue("zaman",out string? zamanCache);
 
-            Console.WriteLine("sonucum "+ sonuc);
 
-            ViewBag.Zaman=_memoryCache.Get<string>("zaman");
+
+            ViewBag.Zaman = zamanCache;
 
             return View();
         }
