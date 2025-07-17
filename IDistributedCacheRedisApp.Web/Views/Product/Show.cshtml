@@ -1,8 +1,12 @@
 ﻿
 @{
     ViewData["Title"] = "Show";
+    Product product = ViewBag.product as Product;
 }
 
 <h1>Show</h1>
-<h1>@ViewBag.Ad</h1>
+
+
+
+<h1> @product.Id --------  @product.Name ------- @product.Price    </h1>
 

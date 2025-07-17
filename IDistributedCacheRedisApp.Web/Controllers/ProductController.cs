@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using IDistributedCacheRedisApp.Web.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Distributed;
+using Newtonsoft.Json;
 
 namespace IDistributedCacheRedisApp.Web.Controllers
 {
@@ -16,25 +18,35 @@ namespace IDistributedCacheRedisApp.Web.Controllers
         {
             DistributedCacheEntryOptions distributedCacheEntryOptions=
                 new DistributedCacheEntryOptions();
-            distributedCacheEntryOptions.AbsoluteExpiration = DateTime.Now.AddMinutes(1);
+            distributedCacheEntryOptions.AbsoluteExpiration = DateTime.Now.AddMinutes(10);
+            //_distributedCache.SetString("ad","Ferhat", distributedCacheEntryOptions);
+            //await _distributedCache.SetStringAsync("soyad","Ferhat", distributedCacheEntryOptions);
 
-            _distributedCache.SetString("ad","Ferhat", distributedCacheEntryOptions);
-            await _distributedCache.SetStringAsync("soyad","Ferhat", distributedCacheEntryOptions);
+            Product product = new Product() { Id=1,Name="Telefon",Price=1233};
+
+            string jsonProduct=JsonConvert.SerializeObject(product);
+
+            _distributedCache.SetString("product:1",jsonProduct,distributedCacheEntryOptions);
 
             return View();
         }
         public IActionResult Show()
         {
-            string? ad=_distributedCache.GetString("ad");
+            //string? ad=_distributedCache.GetString("ad");
+            //ViewBag.Ad = ad;    
+            string jsonProduct = _distributedCache.GetString("product:1");
+            if (jsonProduct != null)
+            {
+                Product product = JsonConvert.DeserializeObject<Product>(jsonProduct);
 
-            ViewBag.Ad = ad;    
-
+                ViewBag.product = product;
+            }
 
             return View();
         }
         public IActionResult Remove()
         {
-            _distributedCache.Remove("ad");
+            //_distributedCache.Remove("ad");
 
 
             return View();
