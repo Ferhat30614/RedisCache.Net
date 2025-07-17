@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Distributed;
 using Newtonsoft.Json;
+using System.Text;
 
 namespace IDistributedCacheRedisApp.Web.Controllers
 {
@@ -22,19 +23,29 @@ namespace IDistributedCacheRedisApp.Web.Controllers
             //_distributedCache.SetString("ad","Ferhat", distributedCacheEntryOptions);
             //await _distributedCache.SetStringAsync("soyad","Ferhat", distributedCacheEntryOptions);
 
-            Product product = new Product() { Id=1,Name="Telefon",Price=1233};
+            Product product = new Product() { Id=1,Name="Araba",Price=758123};
 
-            string jsonProduct=JsonConvert.SerializeObject(product);
+            string jsonProduct=JsonConvert.SerializeObject(product);   // bu şekilde ben bütün complext typlarımı vs serilize edip redise gönderebilirim
 
-            _distributedCache.SetString("product:1",jsonProduct,distributedCacheEntryOptions);
+            Byte[] byteProduct = Encoding.UTF8.GetBytes(jsonProduct);
+
+            _distributedCache.Set("product:1", byteProduct, distributedCacheEntryOptions);
 
             return View();
         }
         public IActionResult Show()
         {
             //string? ad=_distributedCache.GetString("ad");
-            //ViewBag.Ad = ad;    
-            string jsonProduct = _distributedCache.GetString("product:1");
+            //ViewBag.Ad = ad;
+            //
+
+
+            var byteProduct = _distributedCache.Get("product:1");
+
+            var jsonProduct = Encoding.UTF8.GetString(byteProduct);
+
+
+            //string jsonProduct = _distributedCache.GetString("product:1");
             if (jsonProduct != null)
             {
                 Product product = JsonConvert.DeserializeObject<Product>(jsonProduct);
