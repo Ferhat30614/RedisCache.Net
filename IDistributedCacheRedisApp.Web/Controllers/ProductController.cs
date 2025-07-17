@@ -82,5 +82,25 @@ namespace IDistributedCacheRedisApp.Web.Controllers
 
             return File(imageByte, "image/jpg");
         }
+        public IActionResult PdfCache()
+        {
+
+            string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Folders/Vize_Sınavı.pdf");//dosya yolum
+
+            Byte[] pdfByte = System.IO.File.ReadAllBytes(path); //dosyamı byte dizinine çevirdim 
+            _distributedCache.Set("pdf", pdfByte); // byte dizinimi kaydettim redise
+
+            return View();
+        }
+
+        public IActionResult PdfUrl()
+        {
+
+            Byte[] pdfByte = _distributedCache.Get("resim");
+
+
+
+            return File(pdfByte, "application/pdf");
+        }
     }
 }
