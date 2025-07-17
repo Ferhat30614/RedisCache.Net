@@ -96,10 +96,12 @@ namespace IDistributedCacheRedisApp.Web.Controllers
         public IActionResult PdfUrl()
         {
 
-            Byte[] pdfByte = _distributedCache.Get("resim");
+            Byte[] pdfByte = _distributedCache.Get("pdf");
 
-
-
+            if (pdfByte == null)
+            {
+                return NotFound(); // Eğer dosya bulunamazsa 404 döndür
+            }
             return File(pdfByte, "application/pdf");
         }
     }
