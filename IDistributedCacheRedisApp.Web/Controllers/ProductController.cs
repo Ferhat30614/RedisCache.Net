@@ -57,10 +57,30 @@ namespace IDistributedCacheRedisApp.Web.Controllers
         }
         public IActionResult Remove()
         {
-            //_distributedCache.Remove("ad");
+            _distributedCache.Remove("ad");
 
 
             return View();
+        }
+        
+        public IActionResult ImageCache()
+        {
+
+            string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Image/Uzay_Resmi.jpg");//dosya yolum
+
+            Byte[] imageByte= System.IO.File.ReadAllBytes(path); //dosyamı byte dizinine çevirdim 
+            _distributedCache.Set("resim", imageByte); // byte dizinimi kaydettim redise
+             
+            return View();
+        }
+        public IActionResult ImageUrl()
+        {
+
+            Byte[] imageByte = _distributedCache.Get("resim");
+
+
+
+            return File(imageByte, "image/jpg");
         }
     }
 }
