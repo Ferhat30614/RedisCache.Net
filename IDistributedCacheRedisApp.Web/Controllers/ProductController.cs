@@ -70,17 +70,23 @@ namespace IDistributedCacheRedisApp.Web.Controllers
 
             Byte[] imageByte= System.IO.File.ReadAllBytes(path); //dosyamı byte dizinine çevirdim 
             _distributedCache.Set("resim", imageByte); // byte dizinimi kaydettim redise
-             
+
+            // biz burda görselimizi byte dizisine çevirerek redis cacheye kaydettik ve eğer bunu biz normal veritabanına  kaydetseydikte yine şekilde 
+            // byte dizisine çevircektik ve mesela veri tipi varbinary  olan kolona kaydetcektik...
+
+            //img, PDF veya diğer tüm dosya türlerinde aynı prensip uygulanır. Yani, veritabanına kaydederken her dosya,
+            //byte dizisine (binary data) dönüştürülüp VARBINARY türüyle saklanır.
+
             return View();
         }
+
         public IActionResult ImageUrl()
         {
 
             Byte[] imageByte = _distributedCache.Get("resim");
 
-
-
-            return File(imageByte, "image/jpg");
+            return File(imageByte, "image/jpg");   //bu kod   byte diziisini jpg dosyasına çevirip tarayıcıda veren kodmuş yani ımageurl sayfası direkt görseli veriyor
+            // biz bunu index sayfasında göstererek  img etiketiniin içine yazınca onun içinde göstermiş olduk
         }
         public IActionResult PdfCache()
         {
