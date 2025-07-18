@@ -23,6 +23,12 @@ app.UseRouting();
 
 app.UseAuthorization();
 
+// Redis bağlantısını başlatıyoruz
+var redisService = app.Services.GetRequiredService<RedisService>();
+redisService.Connect();  // Redis bağlantısını yapıyoruz
+
+
+
 
 
 app.MapControllerRoute(

@@ -12,8 +12,6 @@ namespace RedisExchangeAPI.Web.Services
 
         public RedisService(IConfiguration configuration)
         {
-           
-
             _redisPort = configuration["Redis:Port"];
             _redisHost = configuration["Redis:Host"];
         }
@@ -23,7 +21,6 @@ namespace RedisExchangeAPI.Web.Services
         {
             string confString = $"{_redisHost}:{_redisPort}";
             _redis=ConnectionMultiplexer.Connect(confString);
-
         }
 
         public IDatabase GetDatabase(int db ) { 
