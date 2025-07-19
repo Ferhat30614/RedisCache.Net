@@ -8,16 +8,23 @@ namespace RedisExampleApp.API.Models
         {        
         }
 
-
-        
-
-
         public DbSet<Product> Products { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Product>().HasData(  //has datanın ne oldunu tam anlayamadım sanırım dbye önden veri eklemek için 
+                
+                new Product()
+                {
+                    Id = 1,
+                    Name= "Ferhat",   
+                },
+                new Product()
+                {
+                    Id = 2,
+                    Name= "Ali",   
+                });   
         }
 
 
