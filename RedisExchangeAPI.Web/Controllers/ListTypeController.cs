@@ -45,5 +45,15 @@ namespace RedisExchangeAPI.Web.Controllers
 
             return RedirectToAction("Index");   
         }
+
+      
+        public IActionResult DeleteItem(string name)
+        {
+
+            db.ListRemoveAsync(listKey,name).Wait();
+
+
+            return RedirectToAction("Index");   
+        }
     }
 }

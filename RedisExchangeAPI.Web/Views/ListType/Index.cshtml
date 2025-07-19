@@ -18,6 +18,6 @@
 
 @foreach(var item in Model){
 
-    <h1>@item</h1>
+    <h1>@item  <a asp-action="DeleteItem" asp-controller="ListType" asp-route-name="@item">sil</a> </h1>
 
 }
