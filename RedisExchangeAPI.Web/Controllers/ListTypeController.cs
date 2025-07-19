@@ -55,5 +55,13 @@ namespace RedisExchangeAPI.Web.Controllers
 
             return RedirectToAction("Index");   
         }
+        public IActionResult RemoveFirstItem()
+        {
+
+            db.ListLeftPop(listKey);
+
+
+            return RedirectToAction("Index");   
+        }
     }
 }
