@@ -18,6 +18,21 @@ namespace RedisExchangeAPI.Web.Controllers
         }
         public IActionResult Index()
         {
+            List<string> names = new List<string>();     
+
+            if (db.KeyExists(listKey))  // bu isimde key vardsa dbmde true döner
+            {
+                db.ListRange(listKey).ToList().ForEach(x =>
+                {
+
+                    names.Add(x.ToString());
+                });
+
+                return View(names);
+
+            } 
+
+
             return View();
         }
 
