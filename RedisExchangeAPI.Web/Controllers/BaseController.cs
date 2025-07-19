@@ -9,16 +9,11 @@ namespace RedisExchangeAPI.Web.Controllers
         private readonly RedisService _redisService;
         protected IDatabase db;
       
-
         public BaseController(RedisService redisService)
         {
             _redisService = redisService;
             db = _redisService.GetDatabase(3);
 
-        }
-        public IActionResult Index()
-        {
-            return View();
         }
     }
 }
