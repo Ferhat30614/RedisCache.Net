@@ -39,28 +39,18 @@ namespace RedisExchangeAPI.Web.Controllers
         [HttpPost]
         public IActionResult Add(string name)
         {
-
             db.ListRightPush(listKey,name);
-
-
             return RedirectToAction("Index");   
         }
 
-      
         public IActionResult DeleteItem(string name)
         {
-
             db.ListRemoveAsync(listKey,name).Wait();
-
-
             return RedirectToAction("Index");   
         }
         public IActionResult RemoveFirstItem()
         {
-
             db.ListLeftPop(listKey);
-
-
             return RedirectToAction("Index");   
         }
     }

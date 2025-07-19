@@ -29,7 +29,7 @@ namespace IDistributedCacheRedisApp.Web.Controllers
 
             Byte[] byteProduct = Encoding.UTF8.GetBytes(jsonProduct);
 
-            //_distributedCache.Set("product:1", byteProduct, distributedCacheEntryOptions);
+            _distributedCache.Set("product:1", byteProduct, distributedCacheEntryOptions);
 
             return View();
         }
