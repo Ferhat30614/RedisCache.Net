@@ -24,6 +24,16 @@ namespace RedisExampleApp.API.Models
                 {
                     Id = 2,
                     Name= "Ali",   
+                },
+                new Product()
+                {
+                    Id = 3,
+                    Name= "Mehmet",   
+                },
+                new Product()
+                {
+                    Id = 4,
+                    Name= "Hasan",   
                 });   
         }
 
