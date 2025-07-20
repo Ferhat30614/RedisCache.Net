@@ -17,7 +17,7 @@ namespace RedisExampleApp.API.Models
                 
                 new Product()
                 {
-                    Id = 1,
+                    Id = 1, // burda hasdata oldundan idyide girdik...
                     Name= "Ferhat",   
                 },
                 new Product()
