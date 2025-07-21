@@ -1,4 +1,7 @@
+using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using RedisExampleApp.API.Models;
 using RedisExampleApp.API.Repositories;
 
@@ -10,20 +13,30 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
     options.UseInMemoryDatabase("MyDatabase");//databaseme isim verdim .
+   
 });
+
 
 builder.Services.AddScoped<IProductRepository,ProductRepository>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
 var app = builder.Build();
 
+//Bu gptinin tavsiyesi çalışıyor ...
+//var options = new DbContextOptionsBuilder<AppDbContext>()
+//    .UseInMemoryDatabase("MyDatabase")
+//    .Options;
 
-using var scope = app.Services.CreateScope();
-var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-dbContext.Database.EnsureCreated();
+//using var context = new AppDbContext(options);
+//context.Database.EnsureCreated();   
+
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>(); // burda aslında ben AppDbContexden örnek oluşturdum 
+    dbContext.Database.EnsureCreated();  //EnsureCreated metodunu burda çağırdımki seddin verileri eklensin dbye 
+}
 
 
 
