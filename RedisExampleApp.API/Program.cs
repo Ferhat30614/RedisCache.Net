@@ -17,7 +17,7 @@ builder.Services.AddScoped<IProductRepository,ProductRepository>();
 
 builder.Services.AddSingleton<RedisService>(sp =>
 {
-    return new RedisService(url : builder.Configuration["CacheOptions:Url"]);
+    return new RedisService(builder.Configuration["CacheOptions:Url"]);
 });
 
 
