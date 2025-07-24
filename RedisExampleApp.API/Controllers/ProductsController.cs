@@ -25,13 +25,6 @@ namespace RedisExampleApp.API.Controllers
             db = database;
 
             db.StringSet("soyadı ","Türe");
-            
-
-
-
-
-
-            
         }
 
         [HttpGet]
