@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using RedisExampleApp.API.Models;
 using RedisExampleApp.API.Repositories;
 using RedisExampleApp.Cache;
+using StackExchange.Redis;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -18,6 +19,12 @@ builder.Services.AddScoped<IProductRepository,ProductRepository>();
 builder.Services.AddSingleton<RedisService>(sp =>
 {
     return new RedisService(builder.Configuration["CacheOptions:Url"]);
+});
+
+builder.Services.AddSingleton<IDatabase>(sp =>
+{
+    var RedisService = sp.GetRequiredService<RedisService>();
+    return RedisService.GetDataBase(0);
 });
 
 
