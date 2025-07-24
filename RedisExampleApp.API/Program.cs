@@ -1,10 +1,7 @@
-using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using RedisExampleApp.API.Models;
 using RedisExampleApp.API.Repositories;
-
+using RedisExampleApp.Cache;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -16,8 +13,13 @@ builder.Services.AddDbContext<AppDbContext>(options =>
    
 });
 
-
 builder.Services.AddScoped<IProductRepository,ProductRepository>();
+
+builder.Services.AddSingleton<RedisService>(sp =>
+{
+    return new RedisService(url : builder.Configuration["CacheOptions:Url"]);
+});
+
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
