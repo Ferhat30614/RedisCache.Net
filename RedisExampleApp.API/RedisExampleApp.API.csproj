@@ -16,8 +16,4 @@
     <ProjectReference Include="..\RedisExampleApp.Cache\RedisExampleApp.Cache.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Dtos\" />
-  </ItemGroup>
-
 </Project>
