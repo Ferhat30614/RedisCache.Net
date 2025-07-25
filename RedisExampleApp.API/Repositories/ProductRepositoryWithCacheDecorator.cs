@@ -22,16 +22,28 @@ namespace RedisExampleApp.API.Repositories
             _cacheRepository = _redisService.GetDataBase(2);
         }
 
-        public Task<Product> CreateAsync(Product product)
+        public async Task<Product> CreateAsync(Product product)
         {
-            throw new NotImplementedException();
+            
+            var cacheProduct = await _productRepository.CreateAsync(product);
+
+            if (_cacheRepository.KeyExists(hashKey))
+            {
+                await _cacheRepository.HashSetAsync(hashKey, cacheProduct.Id, JsonSerializer.Serialize(cacheProduct));
+            }
+            else {
+
+                await LoadToCacheFromDbAsync();
+            }
+
+            return cacheProduct;    
         }
 
         public async Task<List<Product>> GetAsync()
         {
             if (!await _cacheRepository.KeyExistsAsync(hashKey))
             {
-                return await LoadToCacheFrom_cacheRepositoryAsync();
+                return await LoadToCacheFromDbAsync();
             }
 
             var products = new List<Product>();
@@ -51,7 +63,6 @@ namespace RedisExampleApp.API.Repositories
 
         public async Task<Product?> GetByIdAsync(int id)
         {
-
             if (_cacheRepository.KeyExists(hashKey)) {
 
                 var cacheProduct =  await _cacheRepository.HashGetAsync(hashKey,id);
@@ -59,12 +70,10 @@ namespace RedisExampleApp.API.Repositories
            
 
             }
-
             var products = await LoadToCacheFromDbAsync();
             var product = products.FirstOrDefault(x => x.Id == id);
 
             return product;
-
         }
 
         private async Task<List<Product>> LoadToCacheFromDbAsync()
@@ -79,8 +88,6 @@ namespace RedisExampleApp.API.Repositories
             return products;    
             
         }
-
-
 
     }
 }
