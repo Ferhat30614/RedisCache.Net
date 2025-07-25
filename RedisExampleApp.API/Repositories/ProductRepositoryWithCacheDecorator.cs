@@ -27,7 +27,7 @@ namespace RedisExampleApp.API.Repositories
             throw new NotImplementedException();
         }
 
-        public async  Task<List<Product>> GetAsync()
+        public async Task<List<Product>> GetAsync()
         {
             if (!await db.KeyExistsAsync(hashKey))
             {
@@ -36,9 +36,18 @@ namespace RedisExampleApp.API.Repositories
 
             var products = new List<Product>();
 
-            var a = db.HashGetAllAsync(hashKey);
-            
+            var cacheProducts = db.HashGetAll(hashKey);
 
+            foreach (var item in cacheProducts.ToList()) {
+
+
+                var product = JsonSerializer.Deserialize<Product>(item.Value.ToString());
+
+                 if(product != null ) 
+                    products.Add(product);  
+
+            }
+            return products;    
 
 
         }
