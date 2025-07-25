@@ -14,7 +14,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
    
 });
 
-builder.Services.AddScoped<IProductRepository,ProductRepository>();
+
+
 
 builder.Services.AddSingleton<RedisService>(sp =>
 {
@@ -24,8 +25,22 @@ builder.Services.AddSingleton<RedisService>(sp =>
 builder.Services.AddSingleton<IDatabase>(sp =>
 {
     var RedisService = sp.GetRequiredService<RedisService>();
-    return RedisService.GetDataBase(0);
+    return RedisService.GetDataBase(2);
 });
+
+builder.Services.AddScoped<IProductRepository>(sp =>
+{
+    var appDbContext = sp.GetRequiredService<AppDbContext>();
+    var productRepository = new ProductRepository(appDbContext);
+    var redisService = sp.GetRequiredService<RedisService>();
+    //var redisDb= sp.GetRequiredService<IDatabase>();    
+
+
+    return new ProductRepositoryWithCacheDecorator(productRepository,redisService);
+
+});
+
+
 
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

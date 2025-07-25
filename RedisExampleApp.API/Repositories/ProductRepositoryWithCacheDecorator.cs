@@ -14,11 +14,10 @@ namespace RedisExampleApp.API.Repositories
         private readonly RedisService _redisService;
         private readonly IDatabase _cacheRepository;   
 
-        public ProductRepositoryWithCacheDecorator(IProductRepository repository, RedisService redisService,IDatabase database)
+        public ProductRepositoryWithCacheDecorator(IProductRepository repository, RedisService redisService)
         {
             _productRepository = repository;
             _redisService = redisService;
-            _cacheRepository=database;
             _cacheRepository = _redisService.GetDataBase(2);
         }
 
