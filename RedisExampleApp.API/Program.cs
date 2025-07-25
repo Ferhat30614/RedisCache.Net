@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using RedisExampleApp.API.Models;
 using RedisExampleApp.API.Repositories;
+using RedisExampleApp.API.Services;
 using RedisExampleApp.Cache;
 using StackExchange.Redis;
 var builder = WebApplication.CreateBuilder(args);
@@ -39,6 +40,8 @@ builder.Services.AddScoped<IProductRepository>(sp =>
     return new ProductRepositoryWithCacheDecorator(productRepository,redisService);
 
 });
+
+builder.Services.AddScoped<IProductService, ProductService>();
 
 
 

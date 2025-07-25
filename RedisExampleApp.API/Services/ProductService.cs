@@ -1,4 +1,5 @@
-﻿using RedisExampleApp.API.Dtos;
+﻿using Microsoft.Extensions.Configuration.EnvironmentVariables;
+using RedisExampleApp.API.Dtos;
 using RedisExampleApp.API.Models;
 using RedisExampleApp.API.Repositories;
 
@@ -13,9 +14,16 @@ namespace RedisExampleApp.API.Services
             _productRepository = productRepository;
         }
 
-        public Task<ProductDto> CreateAsync(Product product)
+        public async Task<ProductDto> CreateAsync(Product product)
         {
-            throw new NotImplementedException();
+            var result = await _productRepository.CreateAsync(product);    
+            return new ProductDto { 
+                Id = result.Id,    
+                Name = result.Name,        
+                Price = result.Price
+            };    
+
+            
         }
 
         public async Task<List<ProductDto>> GetAsync()
@@ -29,14 +37,16 @@ namespace RedisExampleApp.API.Services
                 Price = product.Price,  
             }).ToList();    
 
-
-             
-
         }
 
-        public Task<ProductDto?> GetByIdAsync(int id)
+        public async  Task<ProductDto?> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            var product = await _productRepository.GetByIdAsync(id);    
+            return new ProductDto{ 
+                Name =product.Name,
+                Price = product.Price,  
+                Id = product.Id     
+            };
         }
     }
 }
